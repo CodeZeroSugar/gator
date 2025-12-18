@@ -18,8 +18,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	cfgState := state{configPtr: &cfg}
-	cfgState.configPtr.DBURL = dbURL
 
 	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
@@ -27,7 +25,13 @@ func main() {
 	}
 
 	dbQueries := database.New(db)
-	cfgState.db = dbQueries
+
+	cfgState := &state{
+		configPtr: &cfg,
+		db:        dbQueries,
+		dbPool:    db,
+	}
+	cfgState.configPtr.DBURL = dbURL
 
 	commands := commands{commandMap: make(map[string]func(*state, command) error)}
 	commands.register("login", handlerLogin)
@@ -35,6 +39,7 @@ func main() {
 	commands.register("reset", reset)
 	commands.register("users", users)
 	commands.register("agg", agg)
+	commands.register("addfeed", addFeed)
 
 	args := os.Args
 	if len(args) < 2 {
@@ -46,7 +51,7 @@ func main() {
 		args: args[2:],
 	}
 
-	if err := commands.run(&cfgState, currentCommand); err != nil {
+	if err := commands.run(cfgState, currentCommand); err != nil {
 		log.Fatal(err)
 	}
 

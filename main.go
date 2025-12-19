@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"os"
 
@@ -40,6 +39,7 @@ func main() {
 	commands.register("users", users)
 	commands.register("agg", agg)
 	commands.register("addfeed", addFeed)
+	commands.register("feeds", feedsHandler)
 
 	args := os.Args
 	if len(args) < 2 {
@@ -55,9 +55,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	contents, err := config.Read()
+	/*contents, err := config.Read()
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Printf("%+v\n", contents)
+	*/
 }

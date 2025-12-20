@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func follow(s *state, cmd command) error {
+func follow(s *state, cmd command, user database.User) error {
 	if len(cmd.args) != 1 {
 		return fmt.Errorf("follow command take 1 arg")
 	}
@@ -19,16 +19,11 @@ func follow(s *state, cmd command) error {
 		return fmt.Errorf("could not find feed with provided url: %w", err)
 	}
 
-	currentUser, err := s.db.GetUser(context.Background(), s.configPtr.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("could not get current user form database: %w", err)
-	}
-
 	feedFollowParams := database.CreateFeedFollowParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
-		UserID:    currentUser.ID,
+		UserID:    user.ID,
 		FeedID:    feedDB.ID,
 	}
 

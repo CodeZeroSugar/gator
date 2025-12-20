@@ -6,6 +6,7 @@ import (
 )
 
 func reset(s *state, cmd command) error {
+	fmt.Println("running reset...")
 	if len(cmd.args) > 0 {
 		return fmt.Errorf("too many args for reset")
 	}
@@ -18,6 +19,10 @@ func reset(s *state, cmd command) error {
 
 	qtx := s.db.WithTx(tx)
 
+	/*if err := qtx.ResetFeedFollows(context.Background()); err != nil {
+		return fmt.Errorf("couldn't reset feed follows in transaction: %w", err)
+	}
+	*/
 	if err := qtx.ResetFeeds(context.Background()); err != nil {
 		return fmt.Errorf("couldn't reset feeds in transaction: %w", err)
 	}

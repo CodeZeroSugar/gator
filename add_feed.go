@@ -31,8 +31,22 @@ func addFeed(s *state, cmd command) error {
 
 	feed, err := s.db.CreateFeed(context.Background(), feedParams)
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("add feed failed to create feed: %w", err)
 	}
+
+	feedFollowParams := database.CreateFeedFollowParams{
+		ID:        uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		UserID:    userID,
+		FeedID:    feed.ID,
+	}
+
+	_, err = s.db.CreateFeedFollow(context.Background(), feedFollowParams)
+	if err != nil {
+		return fmt.Errorf("add feed failed to create feed follow: %w", err)
+	}
+
 	fmt.Printf("%+v", feed)
 
 	return nil

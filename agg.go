@@ -1,22 +1,24 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"log"
+	"time"
 )
 
-const testURL = "https://www.wagslane.dev/index.xml"
-
 func agg(s *state, cmd command) error {
-	if len(cmd.args) > 0 {
-		log.Fatal("Too many arguments for agg command")
+	if len(cmd.args) != 1 {
+		return fmt.Errorf("agg takes one argument")
 	}
-	feed, err := fetchFeed(context.Background(), testURL)
+	timeBetweenRequests, err := time.ParseDuration(cmd.args[0])
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("failed to parse time between requests: %w", err)
 	}
-	fmt.Printf("%+v", feed)
 
-	return nil
+	fmt.Printf("Collecting feeds every %v\n", timeBetweenRequests)
+	ticker := time.NewTicker(timeBetweenRequests)
+	for ; ; <-ticker.C {
+		if err := scrapeFeeds(s.db); err != nil {
+			return fmt.Errorf("error returned from scrape feeds: %w", err)
+		}
+	}
 }

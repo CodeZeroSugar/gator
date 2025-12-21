@@ -20,3 +20,16 @@ FROM feeds
 LEFT JOIN users
 ON feeds.user_id = users.id;
 
+-- name: MarkFeedFetched :one 
+UPDATE feeds
+SET 
+  updated_at = NOW(),
+  last_fetched_at = NOW()   
+WHERE feeds.id = $1
+RETURNING *;
+
+-- name: GetNextFeedToFetch :one
+SELECT *
+FROM feeds
+ORDER BY last_fetched_at NULLS FIRST, created_at
+LIMIT 1;

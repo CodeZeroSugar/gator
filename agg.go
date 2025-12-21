@@ -7,7 +7,7 @@ import (
 
 func agg(s *state, cmd command) error {
 	if len(cmd.args) != 1 {
-		return fmt.Errorf("agg takes one argument")
+		return fmt.Errorf("agg takes one argument: time between requests")
 	}
 	timeBetweenRequests, err := time.ParseDuration(cmd.args[0])
 	if err != nil {

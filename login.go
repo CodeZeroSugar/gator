@@ -18,7 +18,7 @@ func handlerLogin(s *state, cmd command) error {
 	if err := s.configPtr.SetUser(userName); err != nil {
 		return fmt.Errorf("error: login handler failed to set the username")
 	}
-	fmt.Printf("user has been set to %v", userName)
+	fmt.Printf("user has been set to %v\n", userName)
 
 	return nil
 }

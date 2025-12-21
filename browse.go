@@ -37,9 +37,10 @@ func browse(s *state, cmd command, user database.User) error {
 	fmt.Println("")
 
 	for _, post := range posts {
-		fmt.Printf("Feed Name: %v\n", post.FeedName)
-		fmt.Printf("Title: %v\n", post.Title.String)
-		fmt.Printf("Published: %v\n", post.PublishedAt.Time.String())
+		fmt.Printf("Feed Name  : %v\n", post.FeedName)
+		fmt.Printf("Title      : %v\n", post.Title.String)
+		fmt.Printf("URL        : %v\n", post.Url)
+		fmt.Printf("Published  : %v\n", post.PublishedAt.Time.String())
 		fmt.Printf("Description: %v\n", post.Description.String)
 		fmt.Println("")
 

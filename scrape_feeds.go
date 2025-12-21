@@ -60,10 +60,12 @@ func scrapeFeeds(d *database.Queries) error {
 			PublishedAt: publishedAt,
 			FeedID:      feedDB.ID,
 		}
-		_, err1 := d.CreatePost(context.Background(), postParams)
+		p, err1 := d.CreatePost(context.Background(), postParams)
 		if err1 != nil {
 			continue
 		}
+		fmt.Printf("New Post: %v", p.Title.String)
+		fmt.Println("")
 
 	}
 
